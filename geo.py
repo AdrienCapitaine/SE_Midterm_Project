@@ -66,12 +66,3 @@ def get_coordinate(api_key, start_lat, start_lon, end_lat, end_lon):
     # Parse the route coordinates
     coordinates = parse_route_coordinates(route_data)
     return coordinates
-
-
-api_key = "436b1d6d-1167-4c86-9093-00fa35072e7f"
-
-o1 = geocoding("Paris", api_key)
-o2 = geocoding("Rennes", api_key)
-print(o1)
-print(o2)
-print(get_coordinate(api_key, o1[1], o1[2], o2[1], o2[2]))

@@ -32,5 +32,5 @@ def get_stations(coords):
 
 
 
-get_stations([(40.7, -74)])#new york
+#get_stations([(40.7, -74)])#new york
 #get_stations([( 48.864716, 2.34)]) #"paris"

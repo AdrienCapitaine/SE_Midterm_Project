@@ -55,4 +55,4 @@ def get_airports(destinationCity,coords):
 #haversine(40.7, -74, 48.864716, 2.34)
 #get_airports("London", (51.5073509,-0.1277583)) # gets airports in London that are within 50 km of the input coordinates
 
-get_airports("Moscow", (55.7558, 37.6176)) # gets airports in Moscow that are within 50 km of the input coordinates
+#get_airports("Moscow", (55.7558, 37.6176)) # gets airports in Moscow that are within 50 km of the input coordinates

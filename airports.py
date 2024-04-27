@@ -5,8 +5,10 @@ from math import radians, cos, sin, asin, sqrt
 
 def haversine(lon1, lat1, lon2, lat2):
     """
+    float lon1, float lat1, float lon2, float lat2 -> float distance
+
     Calculates the distance in kilometers between two points 
-    on the earth 
+    on the earth.
     """
     lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
     dlon = lon2 - lon1 
@@ -19,7 +21,9 @@ def haversine(lon1, lat1, lon2, lat2):
 
 def get_airports(destinationCity,coords):
     """
-    str,tpl[latitude,longitude] -> list[dict] (airports)
+    str destinationCity, tpl(float latitude,float longitude)  coords-> list[dict] airports
+    
+    This function returns a list dictionnaries describing airports that are affiliated to the destination city as well as within 50 km of the input coordinates.
     """
     key = "LeLHVfX2J+40J2TpuXen7A==JckrqmRp99HGwL2a"
 
@@ -38,21 +42,25 @@ def get_airports(destinationCity,coords):
         airports += res
         i+=1 
 
-    print(len(airports))
+    #print(len(airports))
+    if len(airports) != 0:
+        try:
+            a = airports[0]["latitude"]
+        except:
+            raise ValueError("Api key is invalid or has expired. Please request a new one.")
     
     for airport in airports:
         distance = haversine(coords[0],coords[1], float(airport["latitude"]), float(airport["longitude"]))
-        #print(airport["name"], airport["icao"],distance, airport["latitude"], airport["longitude"] , airport["city"] , '/', airport["country"])
+
         
         if distance <= radius:
-            print(airport["name"], '/',airport["icao"],'/',distance, '/',airport["latitude"],'/', airport["longitude"] , '/',airport["city"] , '/', airport["country"], '/', distance)
+           # print(airport["name"], '/',airport["icao"],'/',distance, '/',airport["latitude"],'/', airport["longitude"] , '/',airport["city"] , '/', airport["country"], '/', distance)
             airport["distance"] = distance
             airports.append(airport)
 
         
     return airports
 
-#haversine(40.7, -74, 48.864716, 2.34)
+# Example
 #get_airports("London", (51.5073509,-0.1277583)) # gets airports in London that are within 50 km of the input coordinates
-
-get_airports("Moscow", (55.7558, 37.6176)) # gets airports in Moscow that are within 50 km of the input coordinates
+#get_airports("Moscow", (55.7558, 37.6176)) # gets airports in Moscow that are within 50 km of the input coordinates

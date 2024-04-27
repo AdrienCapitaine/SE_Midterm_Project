@@ -43,8 +43,8 @@ def geocoding (location, key):
     return json_status,lat,lng,new_loc
 
 
-def get_route(api_key, start_lat, start_lon, end_lat, end_lon):
-    url = f"https://graphhopper.com/api/1/route?point={start_lat},{start_lon}&point={end_lat},{end_lon}&vehicle=car&locale=en&key={api_key}"
+def get_route(api_key, vehicle, start_lat, start_lon, end_lat, end_lon):
+    url = f"https://graphhopper.com/api/1/route?point={start_lat},{start_lon}&point={end_lat},{end_lon}&vehicle={vehicle}&locale=en&key={api_key}"
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
@@ -59,10 +59,55 @@ def parse_route_coordinates(route_data):
         return points
     return None
 
-def get_coordinate(api_key, start_lat, start_lon, end_lat, end_lon):
+def get_info(api_key, vehicle, start_lat, start_lon, end_lat, end_lon):
     # Get the route
-    route_data = get_route(api_key, start_lat, start_lon, end_lat, end_lon)
+    route_data = get_route(api_key, vehicle, start_lat, start_lon, end_lat, end_lon)
+    if route_data is not None:
+        # Parse the route coordinates
+        coordinates = parse_route_coordinates(route_data)
+        sec = int(route_data["paths"][0]["time"] / 1000 % 60)
+        min = int(route_data["paths"][0]["time"] / 1000 / 60 % 60)
+        hr = int(route_data["paths"][0]["time"] / 1000 / 60 / 60 % 24)
+        days = int(route_data["paths"][0]["time"] / 1000 / 60 / 60 / 24)
+        if days > 0:
+            total_time = str(days)+("days " if days > 0 else "day ") + str(hr).zfill(2)+"h "+str(min).zfill(2) + "min " + str(sec).zfill(2) + "sec"
+        elif hr > 0:
+            total_time = str(hr) + "h " + str(min).zfill(2) + "min " + str(sec).zfill(2) + "sec"
+        elif min > 0:
+            total_time = str(min) + "min " + str(sec).zfill(2) + "sec"
+        else:
+            total_time = str(sec) + "sec"
 
-    # Parse the route coordinates
-    coordinates = parse_route_coordinates(route_data)
-    return coordinates
+        total_distance = route_data["paths"][0]["distance"]
+        if total_distance > 1000:
+            total_distance_km = str(round(total_distance/1000, 2)) + " Km"
+        else:
+            total_distance_km = str(int(total_distance)) + " m"
+        total_distance_miles = str(round(total_distance / 1000 / 1.61, 2)) + " miles"
+
+        instructions = route_data["paths"][0]["instructions"]
+        str_instructions = []
+        for each in range(len(route_data["paths"][0]["instructions"])):
+            path = route_data["paths"][0]["instructions"][each]["text"]
+            distance = route_data["paths"][0]["instructions"][each]["distance"]
+            sec = int(route_data["paths"][0]["instructions"][each]["time"] / 1000 % 60)
+            min = int(route_data["paths"][0]["instructions"][each]["time"]/ 1000 / 60 % 60)
+            hr = int(route_data["paths"][0]["instructions"][each]["time"] / 1000 / 60 / 60)
+            if hr > 0:
+                time = str(hr) + "h " + str(min).zfill(2) + "min " + str(sec).zfill(2) + "sec"
+            elif min > 0:
+                time = str(min) + "min " + str(sec).zfill(2) + "sec"
+            else:
+                time = str(sec) + "sec"
+
+            if distance > 1000:
+                distance_km = str(round(distance/1000, 2)) + " Km"
+            else:
+                distance_km = str(int(distance)) + " m"
+
+            distance_miles = str(round(distance / 1000 / 1.61, 2)) + " miles"
+            current_instruction = "{0} during {1} ( {2} / {3} )".format(path, time, distance_km,
+                                                              distance_miles)
+            str_instructions.append(current_instruction)
+        return coordinates, total_time, (total_distance_km, total_distance_miles), str_instructions
+    return None, None, (None, None), None

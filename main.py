@@ -413,7 +413,7 @@ class Result(ctk.CTkFrame):
                                   font=("Helvetica", 15),
                                   wraplength=400)
         temp_from_label.grid(row=1, column=0, padx=10, pady=20)
-        temp_from_answer = ctk.CTkLabel(self.scrollable_frame_weather, text=self.app_instance.from_current_temp_C,
+        temp_from_answer = ctk.CTkLabel(self.scrollable_frame_weather, text=str(self.app_instance.from_current_temp_C)+"°C",
                                    font=("Helvetica", 15),
                                    wraplength=400)
         temp_from_answer.grid(row=1, column=1, padx=10, pady=20)
@@ -442,7 +442,7 @@ class Result(ctk.CTkFrame):
                                        font=("Helvetica", 15),
                                        wraplength=400)
         temp_to_label.grid(row=4, column=0, padx=10, pady=20)
-        temp_to_answer = ctk.CTkLabel(self.scrollable_frame_weather, text=self.app_instance.dest_current_temp_C,
+        temp_to_answer = ctk.CTkLabel(self.scrollable_frame_weather, text=str(self.app_instance.dest_current_temp_C)+"°C",
                                         font=("Helvetica", 15),
                                         wraplength=400)
         temp_to_answer.grid(row=4, column=1, padx=10, pady=20)

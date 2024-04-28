@@ -10,7 +10,7 @@ def get_weather(lat,lon, key):
     url = weather_url + urllib.parse.urlencode({"lat":lat, "lon":lon, "appid":key})
     #print(url)
     res = requests.get(url)
-    data = None
+
     if res.status_code == 200:
         data = res.json() #data en brut
         
@@ -18,10 +18,7 @@ def get_weather(lat,lon, key):
         print("Erreur lors de la requête :", res.status_code)
         return None'''
 
-    description = None
-    current_temp_C = None
-    time_at_dest = None
-    icon_url = None
+
 
     # data = get_weather(37.566535, 126.9779692, "20e8cba3d45624f174ec5764153e239c")
     if data:

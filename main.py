@@ -14,6 +14,7 @@ ctk.set_default_color_theme("dark-blue")
 
 api_key = "436b1d6d-1167-4c86-9093-00fa35072e7f"
 
+
 # Centers the window in middle of the screen of the user
 def CenterWindowToDisplay(Screen: ctk, width: int, height: int, scale_factor: float = 1.0):
     """Centers the window to the main display/monitor"""
@@ -117,18 +118,22 @@ class App(ctk.CTk):
                 city2[2])
             #print(self.total_time, self.total_distance_km, self.total_distance_miles, self.instructions)
             #print(len(self.instructions))
-            [self.destDescription, self.dest_current_temp_C, self.time_at_dest,self.dest_icon_url] = get_weather(city2[1],city2[2],key)
-            [self.fromDescription, self.from_current_temp_C, self.time_at_start, self.from_icon_url] = get_weather(city1[1], city1[2], key)
-            #self.airports = get_airports(self.cityTo[3], [self.cityTo[1], self.cityTo[2]])
-            #self.stations = get_stations([self.cityTo[1], self.cityTo[2]])
-
-        finally:
+            #[self.destDescription, self.dest_current_temp_C, self.time_at_dest,self.dest_icon_url] = get_weather(city2[1],city2[2], key)
+            print(self.cityTo[1])
+            print(self.cityTo[2])
+            print(self.input_frame.toEntry.get())
+            #[self.fromDescription, self.from_current_temp_C, self.time_at_start, self.from_icon_url] = get_weather(city1[1], city1[2], key)
+            self.airports = get_airports(self.cityTo[3], (self.cityTo[1], self.cityTo[2]))
+            self.stations = get_stations([(self.cityTo[1], self.cityTo[2])])
+            print(self.airports)
+            print(self.stations)
             self.result_frame.clear_tab()
             self.result_frame.display_details()
             self.result_frame.display_instructions()
             self.result_frame.display_weather()
             self.result_frame.display_airports()
             self.result_frame.display_stations()
+        finally:
             self.input_frame.requestButton.configure(text=self.input_frame.textRequest)
 
     def setupui(self):
@@ -310,10 +315,11 @@ class Result(ctk.CTkFrame):
     def display_instructions(self):
         self.clear_instructions()
         for i in range(self.instruction_current_index, min(self.instruction_current_index + 6, len(self.app_instance.instructions))):
-            instruction_label = ctk.CTkLabel(self.scrollable_frame_track, text=self.app_instance.instructions[i], wraplength=400)
-            instruction_label.grid(row=i+1, column=0, columnspan=2, padx=10, pady=10)
+            instruction_label = ctk.CTkLabel(self.scrollable_frame_track, text=self.app_instance.instructions[i],
+                                             font=("Helvetica", 15), wraplength=self.scrollable_frame_track.winfo_width(), corner_radius=8)
+            instruction_label.grid(row=i+1, column=0, columnspan=2, padx=30, pady=10,sticky="nsew", ipady = 10)
             if i == self.instruction_current_index:
-                instruction_label.configure(fg_color="red")
+                instruction_label.configure(fg_color="gray28")
 
     def instruction_show_previous(self):
         if self.instruction_current_index > 0:

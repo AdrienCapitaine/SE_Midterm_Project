@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import Frame, Label
 import tkintermapview
 
+import asyncio
+
 from map import *
 from weather01 import *
 from airports import *
@@ -118,12 +120,15 @@ class App(ctk.CTk):
                 city2[2])
             #print(self.total_time, self.total_distance_km, self.total_distance_miles, self.instructions)
             #print(len(self.instructions))
-            [self.destDescription, self.dest_current_temp_C, self.time_at_dest,self.dest_icon_url] = get_weather(city2[1],city2[2], key)
+            [self.destDescription, self.dest_current_temp_C, self.time_at_dest,self.dest_icon_url] = get_weather(
+                city2[1],city2[2], key)
+            [self.fromDescription, self.from_current_temp_C, self.time_at_start, self.from_icon_url] = get_weather(
+                city1[1], city1[2], key)
             print(self.cityTo[1])
             print(self.cityTo[2])
             print(self.input_frame.toEntry.get())
-            [self.fromDescription, self.from_current_temp_C, self.time_at_start, self.from_icon_url] = get_weather(city1[1], city1[2], key)
-            self.airports = get_airports(self.input_frame.toEntry.get(), (self.cityTo[1], self.cityTo[2]))
+
+            #self.airports = get_airports(self.input_frame.toEntry.get(), (self.cityTo[1], self.cityTo[2]))
             self.stations = get_stations([(self.cityTo[1], self.cityTo[2])])
             print(self.airports)
             print(self.stations)
@@ -131,7 +136,9 @@ class App(ctk.CTk):
             self.result_frame.display_details()
             self.result_frame.display_instructions()
             self.result_frame.display_weather()
-            self.result_frame.display_airports()
+            asyncio.run(self.result_frame.handle_airport())
+            print("LAUNCH ASYNC")
+            #self.result_frame.display_airports()
             self.result_frame.display_stations()
         finally:
             self.input_frame.requestButton.configure(text=self.input_frame.textRequest)
@@ -425,9 +432,12 @@ class Result(ctk.CTkFrame):
                                         wraplength=400)
         time_to_answer.grid(row=5, column=1, padx=10, pady=20)
 
+    async def handle_airport(self):
+        self.airports = get_airports(self.app_instance.input_frame.toEntry.get(), (self.app_instance.cityTo[1], self.app_instance.cityTo[2]))
+        self.app_instance.result_frame.display_airports()
 
     def display_airports(self):
-        self
+        print("hello world")
 
     def display_stations(self):
         self

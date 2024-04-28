@@ -27,9 +27,8 @@ def get_stations(coords):
         for station in res["fuel_stations"]:
             stations.append({"latitude" : station["latitude"], "longitude" : station["longitude"], "name" : station["station_name"], "street_address" : station["street_address"], "city" : station["city"],  "fuel_type_code" : station["fuel_type_code"]})
     
-    #for el in stations:
-      #  print(el)
-        
+    for el in stations:
+        print(el)
     return stations
     
 

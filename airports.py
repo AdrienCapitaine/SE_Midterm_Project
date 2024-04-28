@@ -29,9 +29,9 @@ def get_airports(destinationCity,coords):
 
     url = "https://api.api-ninjas.com"
     uri_nearest_airport = "/v1/airports"
-    radius = 50 # 0.5 mile radius around nodes
-    
-    airports = []
+    radius = 50 # 0.5 mile radius around nodes 
+
+    result = []
     res = [1]
     airports =[]
     i = 0
@@ -48,19 +48,19 @@ def get_airports(destinationCity,coords):
             a = airports[0]["latitude"]
         except:
             raise ValueError("Api key is invalid or has expired. Please request a new one.")
-    print("OUAIIIIIIIIIIIIIIIIIIIIIIIII")
+    print("End of request")
     for airport in airports:
         distance = haversine(coords[0],coords[1], float(airport["latitude"]), float(airport["longitude"]))
 
         
         if distance <= radius:
-            #print(airport["name"], '/',airport["icao"],'/',distance, '/',airport["latitude"],'/', airport["longitude"] , '/',airport["city"] , '/', airport["country"], '/', distance)
+           #print(airport["name"], '/',airport["icao"],'/',distance, '/',airport["latitude"],'/', airport["longitude"] , '/',airport["city"] , '/', airport["country"], '/', distance)
             airport["distance"] = distance
-            airports.append(airport)
+            result.append(airport)
 
-        
-    return airports
+    #print(result)
+    return result
 
 # Example
-get_airports("London", (51.5073509,-0.1277583)) # gets airports in London that are within 50 km of the input coordinates
+#get_airports("London", (51.5073509,-0.1277583)) # gets airports in London that are within 50 km of the input coordinates
 #get_airports("Moscow", (55.7558, 37.6176)) # gets airports in Moscow that are within 50 km of the input coordinates

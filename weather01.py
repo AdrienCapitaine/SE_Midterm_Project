@@ -3,7 +3,8 @@ import urllib.parse
 from datetime import datetime 
 
 weather_url = "https://api.openweathermap.org/data/2.5/weather?"
-key = "dac4f1e3814dae0d9ad08b0ba1ed679e" #generate your api key
+#key = "dac4f1e3814dae0d9ad08b0ba1ed679e" #generate your api key
+key = "20e8cba3d45624f174ec5764153e239c"
 
 def get_weather(lat,lon, key):
     #url = "https://api.openweathermap.org/data/2.5/weather?lat=37.566535&lon=126.9779692&appid=20e8cba3d45624f174ec5764153e239c"

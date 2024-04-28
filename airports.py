@@ -36,11 +36,13 @@ def get_airports(destinationCity,coords):
     airports =[]
     i = 0
 
-    while len(res)!=0:
+    while True:
         req = url + uri_nearest_airport + "?"+ urllib.parse.urlencode({"city" : destinationCity, "offset" : i})
         res = requests.get(req,headers={'X-Api-Key': key}).json()
         airports += res
-        i+=1 
+        if len(res)==0:
+            break
+        i+= len(res)
 
     #print(len(airports))
     if len(airports) != 0:
@@ -48,13 +50,13 @@ def get_airports(destinationCity,coords):
             a = airports[0]["latitude"]
         except:
             raise ValueError("Api key is invalid or has expired. Please request a new one.")
-    print("End of request")
+    #print("End of request")
     for airport in airports:
         distance = haversine(coords[0],coords[1], float(airport["latitude"]), float(airport["longitude"]))
 
         
         if distance <= radius:
-           #print(airport["name"], '/',airport["icao"],'/',distance, '/',airport["latitude"],'/', airport["longitude"] , '/',airport["city"] , '/', airport["country"], '/', distance)
+            print(airport["name"], '/',airport["icao"],'/',distance, '/',airport["latitude"],'/', airport["longitude"] , '/',airport["city"] , '/', airport["country"], '/', distance)
             airport["distance"] = distance
             result.append(airport)
 

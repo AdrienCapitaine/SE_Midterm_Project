@@ -39,14 +39,11 @@ class Map:
         self.map_view.delete_all_marker()
 
     def display_on_map(self):
-        # Set the start and end markers
         self.map_view.set_marker(self.start_lat, self.start_lon, text="Start")
         self.map_view.set_marker(self.end_lat, self.end_lon, text="End", marker_color_circle="green", marker_color_outside="green3")
 
-        # Focus on the start point (or any other point)
         self.map_view.set_position(self.start_lat, self.start_lon)
 
-        # Adjust the zoom level as needed
         self.map_view.set_zoom(10)
 
         self.map_view.set_path(self.coordinates, color="blue", width=2)
@@ -108,15 +105,14 @@ class Map:
         coordinate, total_time, total_distance, instructions = get_info(self.api_key, vehicle, start_lat, start_lon, end_lat, end_lon)
         self.set_coordinate(coordinate, start_lat, start_lon, end_lat, end_lon)
         if coordinate is None:
-            messagebox.showerror("Map error", "Road not found beetween :\n\n\'" + self.city1_name + "\'\n\n\tand\n\n\'" + self.city2_name + "\'.")
-            # Set the start and end markers
+            #messagebox.showerror("Map error", "Road not found beetween :\n\n\'" + self.city1_name + "\'\n\n\tand\n\n\'" + self.city2_name + "\'.")
+
             self.map_view.set_marker(self.start_lat, self.start_lon, text="Start")
             self.map_view.set_marker(self.end_lat, self.end_lon, text="End", marker_color_circle="green", marker_color_outside="green3")
 
-            # Focus on the start point (or any other point)
+
             self.map_view.set_position(self.start_lat, self.start_lon)
 
-            # Adjust the zoom level as needed
             self.map_view.set_zoom(10)
             self.allow_view = False
             if self.btn_view is not None:

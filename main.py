@@ -3,8 +3,6 @@ import tkinter as tk
 from tkinter import Frame, Label
 import tkintermapview
 
-import asyncio
-
 from map import *
 from weather01 import *
 from airports import *
@@ -101,14 +99,14 @@ class App(ctk.CTk):
             tk_map.clear()
             city1 = geocoding(self.input_frame.fromEntry.get(), api_key)
             if city1[0] != 200 or city1[1] == 'null' or city1[2] == 'null':
-                self.error_message = "Information Error\n First city not found\n"
+                self.error_message = "Information Error\nFirst city not found\n"
                 self.handle_error(self.error_message)
                 return
             #print(city1)
             self.cityFrom = city1
             city2 = geocoding(self.input_frame.toEntry.get(), api_key)
             if city2[0] != 200 or city2[1] == 'null' or city2[2] == 'null':
-                self.error_message = "Information Error\n Second city not found\n"
+                self.error_message = "Information Error\nSecond city not found\n"
                 self.handle_error(self.error_message)
                 return
             #print(city2)
@@ -118,6 +116,10 @@ class App(ctk.CTk):
                 city2[3], city1[1],
                 city1[2], city2[1],
                 city2[2])
+            if self.total_time is None or self.total_distance_km is None or self.total_distance_miles is None or self.instructions is None:
+                self.error_message = "Information Error\nNo Path Found\n"
+                self.handle_error(self.error_message)
+                return
             #print(self.total_time, self.total_distance_km, self.total_distance_miles, self.instructions)
             #print(len(self.instructions))
             [self.destDescription, self.dest_current_temp_C, self.time_at_dest,self.dest_icon_url] = get_weather(
@@ -128,7 +130,7 @@ class App(ctk.CTk):
             print(self.cityTo[2])
             print(self.input_frame.toEntry.get())
 
-            #self.airports = get_airports(self.input_frame.toEntry.get(), (self.cityTo[1], self.cityTo[2]))
+            self.airports = get_airports(self.input_frame.toEntry.get().split(',')[0], (self.cityTo[1], self.cityTo[2]))
             self.stations = get_stations([(self.cityTo[1], self.cityTo[2])])
             print(self.airports)
             print(self.stations)
@@ -136,9 +138,7 @@ class App(ctk.CTk):
             self.result_frame.display_details()
             self.result_frame.display_instructions()
             self.result_frame.display_weather()
-            asyncio.run(self.result_frame.handle_airport())
-            print("LAUNCH ASYNC")
-            #self.result_frame.display_airports()
+            self.result_frame.display_airports()
             self.result_frame.display_stations()
         finally:
             self.input_frame.requestButton.configure(text=self.input_frame.textRequest)
@@ -304,6 +304,11 @@ class Result(ctk.CTkFrame):
         self.next_button = ctk.CTkButton(self.scrollable_frame_track, text="Next", command=self.instruction_show_next)
         self.next_button.grid(row=0, column=1, padx=10, pady=10)
 
+        # Set up for Airport Scroll
+
+        self.scrollable_frame_airport.grid_columnconfigure(0, weight=1)
+        self.scrollable_frame_airport.grid_columnconfigure(1, weight=1)
+
     def clear_instructions(self):
         for item in self.scrollable_frame_track.winfo_children():
             if isinstance(item, ctk.CTkLabel):
@@ -432,12 +437,28 @@ class Result(ctk.CTkFrame):
                                         wraplength=400)
         time_to_answer.grid(row=5, column=1, padx=10, pady=20)
 
-    async def handle_airport(self):
-        self.airports = get_airports(self.app_instance.input_frame.toEntry.get(), (self.app_instance.cityTo[1], self.app_instance.cityTo[2]))
-        self.app_instance.result_frame.display_airports()
-
     def display_airports(self):
-        print("hello world")
+        info_label = ctk.CTkLabel(self.scrollable_frame_airport, text="Airport Data around the given destination :",
+                                  font=("Helvetica", 18), corner_radius=8)
+        info_label.grid(row=0, column=0, columnspan=2, padx=30, pady=10, sticky="nsew", ipady=10)
+
+        if len(self.app_instance.airports) == 0:
+            info_label = ctk.CTkLabel(self.scrollable_frame_airport, text="No Airport Data",
+                                      font=("Helvetica", 15), corner_radius=8)
+            info_label.grid(row=1, column=0, columnspan=2, padx=30, pady=60, sticky="nsew", ipady=10)
+        else:
+            for i in range(len(self.app_instance.airports)):
+                name_label = ctk.CTkLabel(self.scrollable_frame_airport, text=self.app_instance.airports[i]["name"],
+                                                 font=("Helvetica", 15), corner_radius=8)
+                name_label.grid(row=i + 1, column=0, padx=30, pady=10, sticky="nsew", ipady=10)
+
+                icao_label = ctk.CTkLabel(self.scrollable_frame_airport, text= (self.app_instance.airports[i]["iata"] if self.app_instance.airports[i]["iata"] != '' else self.app_instance.airports[i]["icao"]),
+                                             font=("Helvetica", 15), corner_radius=8)
+                icao_label.grid(row=i + 1, column=1, padx=30, pady=10, sticky="nsew", ipady=10)
+
+                self.app_instance.map_frame.map.map_view.set_marker(float(self.app_instance.airports[i]["latitude"]), float(self.app_instance.airports[i]["longitude"]), text=self.app_instance.airports[i]["name"], marker_color_circle="DeepSkyBlue4",
+                                         marker_color_outside="DeepSkyBlue3")
+
 
     def display_stations(self):
         self

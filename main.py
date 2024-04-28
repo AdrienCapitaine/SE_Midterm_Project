@@ -2,6 +2,7 @@ import customtkinter as ctk
 import tkinter as tk
 from tkinter import Frame, Label
 import tkintermapview
+import random
 
 from map import *
 from weather01 import *
@@ -45,6 +46,7 @@ class App(ctk.CTk):
         self.total_distance_km = None
         self.total_distance_miles = None
         self.instructions = None
+        self.coordPath = None
 
         #Weather
         self.destDescription = None
@@ -62,6 +64,7 @@ class App(ctk.CTk):
 
         #Gas Station
         self.stations = None
+        self.stationNb = 10
 
         self.setupui()
 
@@ -91,6 +94,16 @@ class App(ctk.CTk):
         error_window.grab_set()
         error_window.after(100, error_window.lift)
         error_window.geometry(CenterWindowToDisplay(self, 350, 250))
+
+    def get_random_elements(self, lst, num_elements):
+        num_elements = min(num_elements, len(lst))
+
+        step_size = len(lst) // num_elements
+
+        selected_elements = [lst[i] for i in range(0, len(lst), step_size)]
+
+        return selected_elements
+
 
     def submit(self, tk_map):
         self.input_frame.requestButton.configure(text=self.input_frame.textLoading)
@@ -130,8 +143,10 @@ class App(ctk.CTk):
             print(self.cityTo[2])
             print(self.input_frame.toEntry.get())
 
+            self.coordPath = self.map_frame.map.coordinates
+
             self.airports = get_airports(self.input_frame.toEntry.get().split(',')[0], (self.cityTo[1], self.cityTo[2]))
-            self.stations = get_stations([(self.cityTo[1], self.cityTo[2])])
+            self.stations = get_stations(self.get_random_elements(self.coordPath, self.stationNb))
             print(self.airports)
             print(self.stations)
             self.result_frame.clear_tab()
@@ -309,6 +324,11 @@ class Result(ctk.CTkFrame):
         self.scrollable_frame_airport.grid_columnconfigure(0, weight=1)
         self.scrollable_frame_airport.grid_columnconfigure(1, weight=1)
 
+        # Set up for Station Scroll
+
+        self.scrollable_frame_station.grid_columnconfigure(0, weight=1)
+        self.scrollable_frame_station.grid_columnconfigure(1, weight=1)
+
     def clear_instructions(self):
         for item in self.scrollable_frame_track.winfo_children():
             if isinstance(item, ctk.CTkLabel):
@@ -461,7 +481,30 @@ class Result(ctk.CTkFrame):
 
 
     def display_stations(self):
-        self
+        info_label = ctk.CTkLabel(self.scrollable_frame_station, text="Gas stations around the given destination (USA Only):",
+                                  font=("Helvetica", 18), corner_radius=8)
+        info_label.grid(row=0, column=0, columnspan=2, padx=30, pady=10, sticky="nsew", ipady=10)
+
+        if len(self.app_instance.stations) == 0:
+            info_label = ctk.CTkLabel(self.scrollable_frame_station, text="No Gas Station Data",
+                                      font=("Helvetica", 15), corner_radius=8)
+            info_label.grid(row=1, column=0, columnspan=2, padx=30, pady=60, sticky="nsew", ipady=10)
+        else:
+            for i in range(len(self.app_instance.stations)):
+                name_label = ctk.CTkLabel(self.scrollable_frame_station, text=self.app_instance.stations[i]["name"],
+                                          font=("Helvetica", 15), corner_radius=8)
+                name_label.grid(row=i + 1, column=0, padx=30, pady=10, sticky="nsew", ipady=10)
+
+                street_label = ctk.CTkLabel(self.scrollable_frame_station, text=(
+                    self.app_instance.stations[i]["street_address"]),
+                                          font=("Helvetica", 15), corner_radius=8)
+                street_label.grid(row=i + 1, column=1, padx=30, pady=10, sticky="nsew", ipady=10)
+
+                self.app_instance.map_frame.map.map_view.set_marker(float(self.app_instance.stations[i]["latitude"]),
+                                                                    float(self.app_instance.stations[i]["longitude"]),
+                                                                    text=self.app_instance.stations[i]["name"],
+                                                                    marker_color_circle="sienna3",
+                                                                    marker_color_outside="sienna1")
 
 class Input(ctk.CTkFrame):
 

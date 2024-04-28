@@ -22,7 +22,7 @@ def get_stations(coords):
     for coord in coords:
         latitude = coord[0]
         longitude = coord[1]
-        res = requests.get(url + uri_nearest_station + "?" + urllib.parse.urlencode({"api_key":key, "latitude": latitude, "longitude": longitude, "radius" : 5})).json()
+        res = requests.get(url + uri_nearest_station + "?" + urllib.parse.urlencode({"api_key":key, "latitude": latitude, "longitude": longitude, "radius" : 1})).json()
         
         for station in res["fuel_stations"]:
             stations.append({"latitude" : station["latitude"], "longitude" : station["longitude"], "name" : station["station_name"], "street_address" : station["street_address"], "city" : station["city"],  "fuel_type_code" : station["fuel_type_code"]})

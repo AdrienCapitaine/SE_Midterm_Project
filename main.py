@@ -139,16 +139,16 @@ class App(ctk.CTk):
                 city2[1],city2[2], key)
             [self.fromDescription, self.from_current_temp_C, self.time_at_start, self.from_icon_url] = get_weather(
                 city1[1], city1[2], key)
-            print(self.cityTo[1])
-            print(self.cityTo[2])
-            print(self.input_frame.toEntry.get())
+            #print(self.cityTo[1])
+            #print(self.cityTo[2])
+            #print(self.input_frame.toEntry.get())
 
             self.coordPath = self.map_frame.map.coordinates
 
             self.airports = get_airports(self.input_frame.toEntry.get().split(',')[0], (self.cityTo[1], self.cityTo[2]))
             self.stations = get_stations(self.get_random_elements(self.coordPath, self.stationNb))
-            print(self.airports)
-            print(self.stations)
+            #print(self.airports)
+            #print(self.stations)
             self.result_frame.clear_tab()
             self.result_frame.display_details()
             self.result_frame.display_instructions()

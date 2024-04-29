@@ -36,5 +36,5 @@ def get_weather(lat,lon, key):
             current_time = dt.strftime("%H:%M")
     return [description, current_temp_C, current_time, icon_url]
 
-print(get_weather(37.566535, 126.9779692, "20e8cba3d45624f174ec5764153e239c"))
+#print(get_weather(37.566535, 126.9779692, "20e8cba3d45624f174ec5764153e239c"))
 

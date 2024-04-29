@@ -33,7 +33,7 @@ def geocoding (location, key):
         else:
             new_loc = name
 
-        print("Geocoding API URL for " + new_loc + " (Location Type: " + value + ")\n" + url)
+        # print("Geocoding API URL for " + new_loc + " (Location Type: " + value + ")\n" + url)
     else:
         lat="null"
         lng="null"
@@ -45,7 +45,7 @@ def geocoding (location, key):
 
 def get_route(api_key, vehicle, start_lat, start_lon, end_lat, end_lon):
     url = f"https://graphhopper.com/api/1/route?point={start_lat},{start_lon}&point={end_lat},{end_lon}&vehicle={vehicle}&locale=en&key={api_key}"
-    print(url)
+    # print(url)
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()

@@ -56,7 +56,7 @@ def get_airports(destinationCity,coords):
 
         
         if distance <= radius:
-            print(airport["name"], '/',airport["icao"],'/',distance, '/',airport["latitude"],'/', airport["longitude"] , '/',airport["city"] , '/', airport["country"], '/', distance)
+            #print(airport["name"], '/',airport["icao"],'/',distance, '/',airport["latitude"],'/', airport["longitude"] , '/',airport["city"] , '/', airport["country"], '/', distance)
             airport["distance"] = distance
             result.append(airport)
 

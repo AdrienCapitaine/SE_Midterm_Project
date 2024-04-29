@@ -313,12 +313,6 @@ class Result(ctk.CTkFrame):
         self.scrollable_frame_weather.grid_rowconfigure(4, weight=1)
         self.scrollable_frame_weather.grid_rowconfigure(5, weight=1)
 
-        self.prev_button = ctk.CTkButton(self.scrollable_frame_track, text="Previous", command=self.instruction_show_previous)
-        self.prev_button.grid(row=0, column=0, padx=10, pady=10)
-
-        self.next_button = ctk.CTkButton(self.scrollable_frame_track, text="Next", command=self.instruction_show_next)
-        self.next_button.grid(row=0, column=1, padx=10, pady=10)
-
         # Set up for Airport Scroll
 
         self.scrollable_frame_airport.grid_columnconfigure(0, weight=1)
@@ -331,7 +325,7 @@ class Result(ctk.CTkFrame):
 
     def clear_instructions(self):
         for item in self.scrollable_frame_track.winfo_children():
-            if isinstance(item, ctk.CTkLabel):
+            if isinstance(item, ctk.CTkLabel) or isinstance(item, ctk.CTkButton):
                 item.destroy()
     def clear_tab(self):
         tab = {self.scrollable_frame_details,
@@ -346,6 +340,13 @@ class Result(ctk.CTkFrame):
 
     def display_instructions(self):
         self.clear_instructions()
+        self.prev_button = ctk.CTkButton(self.scrollable_frame_track, text="Previous",
+                                         command=self.instruction_show_previous)
+        self.prev_button.grid(row=0, column=0, padx=10, pady=10)
+
+        self.next_button = ctk.CTkButton(self.scrollable_frame_track, text="Next", command=self.instruction_show_next)
+        self.next_button.grid(row=0, column=1, padx=10, pady=10)
+
         for i in range(self.instruction_current_index, min(self.instruction_current_index + 6, len(self.app_instance.instructions))):
             instruction_label = ctk.CTkLabel(self.scrollable_frame_track, text=self.app_instance.instructions[i],
                                              font=("Helvetica", 15), wraplength=self.scrollable_frame_track.winfo_width(), corner_radius=8)

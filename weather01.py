@@ -12,7 +12,7 @@ def get_weather(lat,lon, key):
     url = weather_url + urllib.parse.urlencode({"lat":lat, "lon":lon, "appid":key})
     res = requests.get(url)
 
-    print(res.status_code)
+    #print(res.status_code)
     if res.status_code == 200:
         data = res.json() #data en brut
 
@@ -28,7 +28,10 @@ def get_weather(lat,lon, key):
         # From the lat/long, get the tz-database-style time zone name (e.g. 'America/Vancouver') or None
         timezone_str = tf.certain_timezone_at(lat=lat, lng=lon)
         if timezone_str is None:
-            print("Could not determine the time zone")
+            # print("Could not determine the time zone")
+            timezone = None
+            dt = None
+            current_time = None
         else:
             # Display the current time in that time zone
             timezone = pytz.timezone(timezone_str)

@@ -75,4 +75,4 @@ The application is divided into 3 sections:
  	 <img src="src/gas_station.png" height="240"> <img src="src/point_gas_station.png" height="240">
 
 
-
+> You can find the presentation file at the source folder : SE_API_Project.pptx

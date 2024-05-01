@@ -37,8 +37,8 @@ python3 main.py
 
 Global view:
 
-![](src/overview.png)
-<a href="https://www.youtube.com/watch?v=C9FWHAJ370c&ab_channel=ProjectSoftwareINHA" target="_blank">Watch the presentation video</a>
+https://github.com/AdrienCapitaine/SE_Midterm_Project/assets/94189644/4960acf4-96dd-4e90-bfa0-8ba06b3680ee
+
 
 
 The application is divided into 3 sections: 

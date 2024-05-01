@@ -2,13 +2,27 @@ import urllib
 import requests
 from polyline import polyline
 
-def geocoding (location, key):
+def geocoding (location:str, key:str) -> (int, str, str, str):
+    """
+        Get the coordinates (latitude and longitude) of the location
+
+        Parameters:
+            location : the location name
+            key : api key
+
+        Return:
+            json_status : status code of the request (200 for good request)
+            lat : latitude of the location
+            lng : longitude of the location
+            new_loc : the city name, the state and the country of the location
+    """
     geocode_url = "https://graphhopper.com/api/1/geocode?"
     url = geocode_url + urllib.parse.urlencode({"q":location, "limit": "1",
     "key":key})
     replydata = requests.get(url)
     json_data = replydata.json()
     json_status = replydata.status_code
+    # Verify if the request was successful
     if json_status == 200 and len(json_data["hits"]) !=0:
         json_data = requests.get(url).json()
         lat=(json_data["hits"][0]["point"]["lat"])
@@ -33,7 +47,6 @@ def geocoding (location, key):
         else:
             new_loc = name
 
-        # print("Geocoding API URL for " + new_loc + " (Location Type: " + value + ")\n" + url)
     else:
         lat="null"
         lng="null"
@@ -43,16 +56,35 @@ def geocoding (location, key):
     return json_status,lat,lng,new_loc
 
 
-def get_route(api_key, vehicle, start_lat, start_lon, end_lat, end_lon):
+def get_route(api_key:str, vehicle:str, start_lat:str, start_lon:str, end_lat:str, end_lon:str) -> str:
+    """
+        Get the response of the api for the route between two points ((strat_lat, start_long), (end_lat, end_long))
+
+        Parameters:
+            api_key: api_key
+            vehicule : the mean of transport [car, bike, foot]
+            start_lat, start_long : coordinate of starting point
+            end_lat, end_long : coordinate of arrival point
+
+        Return: the json response
+
+    """
     url = f"https://graphhopper.com/api/1/route?point={start_lat},{start_lon}&point={end_lat},{end_lon}&vehicle={vehicle}&locale=en&key={api_key}"
-    # print(url)
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
     else:
         return None
 
-def parse_route_coordinates(route_data):
+def parse_route_coordinates(route_data: dict) -> list[list[float, float]]:
+    """
+        Get the list of coordinates for the route between two points ((strat_lat, start_long), (end_lat, end_long))
+
+        Parameters:
+            route_data: the json response of the API
+
+        Return: a list of coordinates for the route
+    """
     if route_data is not None:
         points = route_data['paths'][0]['points']
         decoded_points = polyline.decode(points)
@@ -60,7 +92,25 @@ def parse_route_coordinates(route_data):
         return points
     return None
 
-def get_info(api_key, vehicle, start_lat, start_lon, end_lat, end_lon):
+def get_info(api_key:str, vehicle:str, start_lat:str, start_lon:str, end_lat:str, end_lon:str) -> (list[list[float, float]], str, (str, str), list[str]):
+    """
+        Get the route between two points ((strat_lat, start_long), (end_lat, end_long)) and
+        formats other data such as distance, time and instructions
+
+        Parameters:
+            api_key: api key
+            vehicule : the mean of transport [car, bike, foot]
+            start_lat, start_long : coordinate of starting point
+            end_lat, end_long : coordinate of arrival point
+
+        Return:
+            coordinates : a list of coordinates for the route
+            total_time : the time (in format (day, hour, minute, second))
+            total_distance_Km : the distance in Km
+            total_distance_miles : the distance in miles
+            str_instructions : a list of string instructions
+    """
+
     # Get the route
     route_data = get_route(api_key, vehicle, start_lat, start_lon, end_lat, end_lon)
     if route_data is not None:

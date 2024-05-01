@@ -1,12 +1,21 @@
-from geo import *
+from geo import * #import all the functions that make call to the geolocation API
 import webbrowser
 import folium
+import customtkinter as ctk
+import tkintermapview
 
-from tkinter import messagebox
-
+# Class for the map
 class Map:
 
-    def __init__(self, map_view, api_key):
+    def __init__(self, map_view: tkintermapview.TkinterMapView, api_key:str):
+        """
+            The constructor
+
+            Parameters:
+                map_view: the tkinter widget for map view
+                api_key: api key
+
+        """
         self.coordinates = []
         self.start_lat = None
         self.start_lon = None
@@ -19,15 +28,32 @@ class Map:
         self.btn_view = None
         self.api_key = api_key
 
-    def set_btn(self, btn):
+    def set_btn(self, btn: ctk.CTkButton):
+        """
+            set the view boutton in browser
+
+            Parameters:
+                btn: the tkinter button widget
+        """
         self.btn_view = btn
         self.btn_view["state"] = "disable"
 
     def save_and_display_browser(self):
+        """
+            display the map in the browser
+        """
         if self.allow_view:
             webbrowser.open("map.html")
 
-    def set_coordinate(self, coordinates, start_lat, start_lon, end_lat, end_lon):
+    def set_coordinate(self, coordinates: list[list[float, float]], start_lat:float, start_lon:float, end_lat:float, end_lon:float):
+        """
+            set the variable : coordinates, start_lat, start_lon, end_lat, end_lon
+
+            Parameters:
+                coordinates : list of coordinates for the route
+                start_lat, start_long : coordinate of starting point
+                end_lat, end_long : coordinate of arrival point
+        """
         self.coordinates = coordinates
         self.start_lat = start_lat
         self.start_lon = start_lon
@@ -35,10 +61,16 @@ class Map:
         self.end_lon = end_lon
 
     def clear(self):
+        """
+            Clear the map view widget
+        """
         self.map_view.delete_all_path()
         self.map_view.delete_all_marker()
 
     def display_on_map(self):
+        """
+            Set the markers and the route one the map view widget
+        """
         self.map_view.set_marker(self.start_lat, self.start_lon, text="Start")
         self.map_view.set_marker(self.end_lat, self.end_lon, text="End", marker_color_circle="green", marker_color_outside="green3")
 
@@ -49,6 +81,9 @@ class Map:
         self.map_view.set_path(self.coordinates, color="blue", width=2)
 
     def save_map(self):
+        """
+            Create the HTML file with marker in order to display it in the browser later if necessary
+        """
         m = folium.Map(location=[self.start_lat, self.start_lon], zoom_start=13)
         folium.PolyLine(self.coordinates, color="blue", weight=float(2.5), opacity=1).add_to(m)
 
@@ -98,7 +133,20 @@ class Map:
         m.save("map.html")
 
 
-    def display(self, vehicle, city1_name, city2_name, start_lat, start_lon, end_lat, end_lon):
+    def display(self, vehicle: str, city1_name:str, city2_name:str, start_lat:float, start_lon:float, end_lat:float, end_lon:float):
+        """
+            The main function for the map that compute the route, time, distance and instructions from coordinates and vehicule
+
+            Parameters:
+                vehicule : the mean of transport [car, bike, foot]
+                city1_name, city2_name : city name
+                start_lat, start_long : coordinate of starting point
+                end_lat, end_long : coordinate of arrival point
+
+            Return:
+                time, distance and instructions
+
+        """
         self.city1_name = city1_name
         self.city2_name = city2_name
 

@@ -39,7 +39,7 @@ Global view:
 
 https://github.com/AdrienCapitaine/SE_Midterm_Project/assets/94189644/4960acf4-96dd-4e90-bfa0-8ba06b3680ee
 
-
+<a href="https://www.youtube.com/watch?v=C9FWHAJ370c&ab_channel=ProjectSoftwareINHA" target="_blank">Presentation video in better quality</a>
 
 The application is divided into 3 sections: 
 - First, the top left-hand section is used to enter the point of departure, destination and means of transport (car, bike or on foot).

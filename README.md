@@ -25,7 +25,7 @@ sudo apt install python3-pip
 - <a href="https://www.graphhopper.com/" target="_blank">Graphhopper</a> : Used to obtain the path, time and distance from two points
 - <a href="https://api-ninjas.com/" target="_blank">API Ninjas</a> : Get the airports location
 - <a href="https://openweathermap.org/api/" target="_blank">OpenWeatherMap API</a> : Get the current weather
-- <a href="https://developer.nrel.gov/" target="_blank">Developer Network API</a> : Get information about gas station in U.S
+- <a href="https://developer.nrel.gov/docs/transportation/alt-fuel-stations-v1/nearest/" target="_blank">Developer Network API</a> : Get information about gas station in U.S
 
 
 # Demonstration

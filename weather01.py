@@ -23,7 +23,7 @@ def get_weather(lat:float,lon:float, key:str)->tuple:
     """
     url = weather_url + urllib.parse.urlencode({"lat":lat, "lon":lon, "appid":key})
     res = requests.get(url)
-    print(res.status_code)
+    #print(res.status_code)
     if res.status_code == 200:
         data = res.json() #data en brut
 

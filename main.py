@@ -463,7 +463,7 @@ class Result(ctk.CTkFrame):
         """
         Displays result of the request to the Weather API
         """
-        from_label = ctk.CTkLabel(self.scrollable_frame_weather, text=f"Weather from {self.app_instance.cityFrom[3]} :",
+        from_label = ctk.CTkLabel(self.scrollable_frame_weather, text=f"Weather in {self.app_instance.cityFrom[3]} :",
                                   font=("Helvetica", 15),
                                   wraplength=400)
         from_label.grid(row=0, column=0, padx=10, pady=20)
@@ -493,7 +493,7 @@ class Result(ctk.CTkFrame):
                                         wraplength=400)
         time_from_answer.grid(row=2, column=1, padx=10, pady=20)
 
-        to_label = ctk.CTkLabel(self.scrollable_frame_weather, text=f"Weather from {self.app_instance.cityTo[3]} :",
+        to_label = ctk.CTkLabel(self.scrollable_frame_weather, text=f"Weather in {self.app_instance.cityTo[3]} :",
                                 font=("Helvetica", 15),
                                 wraplength=400)
         to_label.grid(row=3, column=0, padx=10, pady=20)

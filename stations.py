@@ -6,7 +6,7 @@ import requests
 
 #output format : https://developer.nrel.gov/docs/transportation/alt-fuel-stations-v1/nearest/#json-output-format
 def get_stations(coords):
-       """
+    """
     Retrieves information about fuel stations within a 0.5 mile radius of provided coordinates.
 
     Parameters:

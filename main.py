@@ -11,10 +11,11 @@ from stations import *
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
 
+# Api key of the Map API
 api_key = "436b1d6d-1167-4c86-9093-00fa35072e7f"
 
 
-def center_window_to_display(screen: ctk, width: int, height: int, scale_factor: float = 1.0):
+def center_window_to_display(screen: ctk, width: int, height: int, scale_factor: float = 1.0) -> str:
     """
     Centers the window to the main display/monitor
 
@@ -77,7 +78,7 @@ class App(ctk.CTk):
 
         self.setupui()
 
-    def handle_error(self, error_message):
+    def handle_error(self, error_message: str):
         """
         Handles error with the built-in ctk windows
 
@@ -98,7 +99,8 @@ class App(ctk.CTk):
         error_window.after(100, error_window.lift)
         error_window.geometry(center_window_to_display(self, 350, 250))
 
-    def get_random_elements(self, lst, num_elements):
+    @staticmethod
+    def get_random_elements(lst: list, num_elements: int) -> list:
         """
         Get random coordinates along the path given in the list
 
@@ -117,7 +119,7 @@ class App(ctk.CTk):
 
         return selected_elements
 
-    def submit(self, tk_map):
+    def submit(self, tk_map: Map):
         """
         Functions that launches all the requests to all APIs
 
